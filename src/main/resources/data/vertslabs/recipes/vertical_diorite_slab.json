@@ -1,0 +1,14 @@
+
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "vertical_slab",
+  "ingredients": [
+    {
+      "item": "minecraft:diorite_slab"
+    }
+  ],
+  "result": {
+    "item": "vertslabs:vertical_diorite_slab"
+  }
+}
+    

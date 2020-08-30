@@ -1,0 +1,14 @@
+
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "vertical_slab",
+  "ingredients": [
+    {
+      "item": "minecraft:mossy_cobblestone_slab"
+    }
+  ],
+  "result": {
+    "item": "vertslabs:vertical_mossy_cobblestone_slab"
+  }
+}
+    

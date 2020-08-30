@@ -1,0 +1,14 @@
+
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "vertical_wooden_slab",
+  "ingredients": [
+    {
+      "item": "minecraft:warped_slab"
+    }
+  ],
+  "result": {
+    "item": "vertslabs:vertical_warped_slab"
+  }
+}
+    

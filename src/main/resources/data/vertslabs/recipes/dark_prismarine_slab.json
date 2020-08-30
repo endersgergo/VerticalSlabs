@@ -1,0 +1,14 @@
+
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "slab",
+  "ingredients": [
+    {
+      "item": "vertslabs:vertical_dark_prismarine_slab"
+    }
+  ],
+  "result": {
+    "item": "minecraft:dark_prismarine_slab"
+  }
+}
+    

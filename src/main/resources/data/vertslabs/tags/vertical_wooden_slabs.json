@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "vertslabs:vertical_oak_slab",
+    "vertslabs:vertical_spruce_slab",
+    "vertslabs:vertical_birch_slab",
+    "vertslabs:vertical_jungle_slab",
+    "vertslabs:vertical_acacia_slab",
+    "vertslabs:vertical_dark_oak_slab",
+    "vertslabs:vertical_crimson_slab",
+    "vertslabs:vertical_warped_slab"
+  ]
+}

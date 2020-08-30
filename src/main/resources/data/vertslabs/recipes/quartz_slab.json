@@ -1,0 +1,14 @@
+
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "slab",
+  "ingredients": [
+    {
+      "item": "vertslabs:vertical_quartz_slab"
+    }
+  ],
+  "result": {
+    "item": "minecraft:quartz_slab"
+  }
+}
+    

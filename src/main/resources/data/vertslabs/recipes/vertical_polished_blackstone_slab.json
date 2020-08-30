@@ -1,0 +1,14 @@
+
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "vertical_slab",
+  "ingredients": [
+    {
+      "item": "minecraft:polished_blackstone_slab"
+    }
+  ],
+  "result": {
+    "item": "vertslabs:vertical_polished_blackstone_slab"
+  }
+}
+    

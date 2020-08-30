@@ -1,0 +1,14 @@
+
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "vertical_slab",
+  "ingredients": [
+    {
+      "item": "minecraft:purpur_slab"
+    }
+  ],
+  "result": {
+    "item": "vertslabs:vertical_purpur_slab"
+  }
+}
+    

@@ -1,0 +1,14 @@
+
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "vertical_slab",
+  "ingredients": [
+    {
+      "item": "minecraft:red_nether_brick_slab"
+    }
+  ],
+  "result": {
+    "item": "vertslabs:vertical_red_nether_brick_slab"
+  }
+}
+    
