@@ -7,21 +7,20 @@ import net.minecraft.block.IWaterLoggable;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.*;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.*;
 import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.IBooleanFunction;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
 import java.util.stream.Stream;
@@ -52,7 +51,7 @@ public class VerticalSlabBase extends Block implements IWaterLoggable {
 
     private static final VoxelShape SHAPE_NIR = Stream.of(
             Block.makeCuboidShape(0, 16, 0, 16, 0, 8),
-            Block.makeCuboidShape(8, 16, 0, 16, 8, 16))
+            Block.makeCuboidShape(8, 0, 0, 16, 16, 16))
             .reduce((v1, v2) -> {
                 return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);}).get();
 
@@ -156,8 +155,11 @@ public class VerticalSlabBase extends Block implements IWaterLoggable {
                 return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);}).get();
 
     public VerticalSlabBase(Properties properties) {
-        super(properties.notSolid());
-        this.setDefaultState(this.stateContainer.getBaseState().with(FULL, false).with(SHAPE, 0));
+        super(properties.notSolid().variableOpacity());
+        this.setDefaultState(this.stateContainer.getBaseState()
+                .with(FULL, false)
+                .with(SHAPE, 0)
+                .with(BlockStateProperties.WATERLOGGED, false));
     }
 
     @Nullable
@@ -165,6 +167,10 @@ public class VerticalSlabBase extends Block implements IWaterLoggable {
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         BlockState checkedState = checkAdjacentBlocks(context.getWorld(), context.getPos(),
                 this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing()), 0);
+
+        if (context.getWorld().getBlockState(context.getPos()).getFluidState().getFluid() instanceof WaterFluid &&
+                context.getWorld().getBlockState(context.getPos()).getFluidState().isSource())
+            checkedState = checkedState.with(BlockStateProperties.WATERLOGGED, true);
 
         return checkedState;
     }
@@ -262,7 +268,31 @@ public class VerticalSlabBase extends Block implements IWaterLoggable {
     }
 
     public boolean canContainFluid(IBlockReader worldIn, BlockPos pos, BlockState state, Fluid fluidIn) {
-        return !state.get(FULL);
+        return !state.get(FULL) && !state.get(BlockStateProperties.WATERLOGGED) && fluidIn instanceof WaterFluid;
+    }
+
+    @Override
+    public Fluid pickupFluid(IWorld world, BlockPos pos, BlockState state) {
+        if(state.get(BlockStateProperties.WATERLOGGED)) {
+            world.setBlockState(pos, state.with(BlockStateProperties.WATERLOGGED, false), 3);
+            return Fluids.WATER;
+        }
+        return Fluids.EMPTY;
+    }
+
+    @Override
+    public FluidState getFluidState(BlockState state) {
+        if (state.get(BlockStateProperties.WATERLOGGED)) return Fluids.WATER.getStillFluidState(true);
+        else return Fluids.EMPTY.getDefaultState();
+    }
+
+    @Deprecated
+    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, World worldIn, BlockPos currentPos, BlockPos facingPos) {
+        if (!stateIn.get(BlockStateProperties.WATERLOGGED)) {
+            this.receiveFluid(worldIn, currentPos, stateIn, Fluids.WATER.getStillFluidState(false));
+        }
+        worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
+        return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
 
     private BlockState checkAdjacentBlocks(World world, BlockPos pos, BlockState center, int beingDestroyed) {
